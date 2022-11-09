@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import ContactForm from './contactForm';
 import ContactList from './contactList';
 import Filter from './filter';
 import { AppTitle, ListTitle, Container } from './App.styled';
 
-// const LS_KEY = 'contactsArray';
+const LS_KEY = 'contactsArray';
 
 export default function App() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(
+    JSON.parse(window.localStorage.getItem(LS_KEY)) ?? []
+  );
   const [filter, setFilter] = useState('');
+
+  useEffect(() => {
+    window.localStorage.setItem(LS_KEY, JSON.stringify(contacts));
+  }, [contacts]);
 
   const addContact = (name, number) => {
     const isExist = contacts.find(contact => contact.name === name);
